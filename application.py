@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, session, render_template
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -20,7 +21,9 @@ def index():
 
 @app.route("/search")
 def search():
-    return render_template("search.html")
+    ##test = request.form.get("test") 
+    return render_template("search.html", methods=["POST"])
+    
 
 @app.route("/signup")
 def signup():
