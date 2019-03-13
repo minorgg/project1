@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_session import Session
 import os
+from passlib.hash import sha256_crypt
 
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/", methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
+    
 
 @app.route("/search")
 def search():
@@ -30,7 +32,7 @@ def search():
 def signup():
     if request.method == "POST":   
         username = request.form.get("username")
-        password = request.form.get("password")
+        password = sha256_crypt.encrypt((str(request.form.get("password"))))
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
         {"username": username, "password" : password})
         db.commit()
@@ -52,7 +54,7 @@ def login():
         try: 
             password = result[1]
             
-            if password == passwordform:
+            if sha256_crypt.verify(passwordform, password) == True:
                 session['logged_in'] = True
                 session['user'] = username
                 return redirect(url_for('index'))
