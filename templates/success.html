@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    Hompage
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>Welcome {{ user }}. Successfully registered!</h1>
+    <h1>You can Login now from <a href="{{ url_for('login') }}">Here!</a></h1>
+
+{% endblock %}
